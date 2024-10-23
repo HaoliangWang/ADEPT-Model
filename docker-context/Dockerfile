@@ -55,5 +55,5 @@ RUN cat /.bash_mods >> /root/.bashrc; \
 
 ENTRYPOINT /bin/bash
 
-WORKDIR /root/adept-model
+WORKDIR /home/haw027/code/ADEPT-Model
 

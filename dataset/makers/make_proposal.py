@@ -5,6 +5,8 @@ import os
 
 import pycocotools.mask as mask_util
 
+import sys
+sys.path.append('.')
 from utils.constants import AREA_MIN_THRESHOLD
 from utils.io import read_serialized, write_serialized, json
 

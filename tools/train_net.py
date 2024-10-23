@@ -8,6 +8,8 @@ import torch
 from torch.utils.data.dataloader import DataLoader
 
 from tensorboardX import SummaryWriter
+import sys
+sys.path.append('.')
 from tools.net_defaults import _C as cfg
 from models import build_model
 from dataset import cycle

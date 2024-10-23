@@ -1,7 +1,7 @@
 import os
 import random
 
-CONTENT_FOLDER = "/root/adept-model/"
+CONTENT_FOLDER = "/home/haw027/code/ADEPT-Model/"
 
 WIDTH = 480
 HEIGHT = 320

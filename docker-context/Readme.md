@@ -15,7 +15,7 @@ sudo docker build -t adept-model:latest .
 this  will mount the root directory of this repo inside the container and start an instance
 
 ```sh
-sudo docker run -it -v $(dirname "$(pwd)"):/root/adept-model --gpus all adept-model:latest
+sudo docker run -it -v $(dirname "$(pwd)"):/home/haw027/code/ADEPT-Model --gpus all adept-model:latest
 ```
 
 # Finish Instalation
@@ -37,15 +37,15 @@ git clone https://github.com/facebookresearch/maskrcnn-benchmark.git \
 
 inside  the  containers bash:
 ```sh
-cd /root/adept-model/;
+cd /home/haw027/code/ADEPT-Model/;
 ./scripts/download_pretrained_model.sh
 ```
 
 ## 1.2 set the directory  for the different sets, here we use an included sample
 
 ```sh
-export TEST_SET='/root/adept-model/data_sample/human'
-export TRAIN_SET='/root/adept-model/data_sample/train'
+export TEST_SET='/home/haw027/code/ADEPT-Model/data_sample/human'
+export TRAIN_SET='/home/haw027/code/ADEPT-Model/data_sample/train'
 ```
 
 set `TRAIN_ROOT` and `HUMAN_ROOT` in `tools/paths_catalog.py` to `${TRAIN_SET}` and `${TEST_SET}` respectively
@@ -97,7 +97,7 @@ figure  out how to put the data and set it up elegantly
 get annotations for the  test data:
 
 ```sh
-python -m dataset.makers.make_coco -i /root/adept-model/data_sample/human_sample -o data/human_ann.json
+python -m dataset.makers.make_coco -i /home/haw027/code/ADEPT-Model/data_sample/human_sample -o data/human_ann.json
 ```
 
 train on single GPU
@@ -111,7 +111,7 @@ python -m tools.detection_test_net --config_file experiments/default_detection.y
 
 Prepare data to create object proposals
 ```sh
-python -m dataset.makers.make_proposal -i /root/adept-model/data_sample/human_sample -o data/annotated_human_ann.json -s output/default_detection/inference/physics_human/segm.json
+python -m dataset.makers.make_proposal -i /home/haw027/code/ADEPT-Model/data_sample/human_sample -o data/annotated_human_ann.json -s output/default_detection/inference/physics_human/segm.json
 ```
 test the derenderer to create object proposals in the human test set
 ```sh
