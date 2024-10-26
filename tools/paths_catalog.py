@@ -5,7 +5,7 @@ from easydict import EasyDict
 
 
 class DatasetCatalog(object):
-    TRAIN_ROOT = "/home/haw027/code/ADEPT-Model/data_sample/train/"
+    TRAIN_ROOT = "/ccn2/u/haw027/b3d_ipe/train/"
     HUMAN_ROOT = "/home/haw027/code/ADEPT-Model/data_sample/human/"
 
     @staticmethod
@@ -25,8 +25,8 @@ class DatasetCatalog(object):
         if name.startswith("annotated_physics"):
             physics_map = {
                 "annotated_physics_human": "data/annotated_human_ann.json",
-                "annotated_physics_train": "data/annotated_ann.json",
-                "annotated_physics_val": "data/annotated_ann.json"
+                "annotated_physics_train": "/ccn2/u/haw027/b3d_ipe/annotated_ann.json",
+                "annotated_physics_val": "/ccn2/u/haw027/b3d_ipe/annotated_ann.json"
             }
             return build_dataset(
                 EasyDict(NAME="OBJECT_PROPOSAL", OBJECT_DERENDER_FILE=physics_map[name],

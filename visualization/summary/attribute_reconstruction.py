@@ -9,7 +9,7 @@ import pybullet as p
 from easydict import EasyDict
 
 from physics.visualize.mask_visualize import visible_image
-from utils.constants import COLORS, TYPES, TERMS
+from utils.constants import TYPES, TERMS
 from utils.misc import to_cpu, FONT
 
 
@@ -29,9 +29,6 @@ class AttributeReconstructionVisualizer(object):
             if term == "type":
                 t = TYPES[torch.argmax(attribute[term]).item()]
                 text += "{:<10}: {:}\n".format(term, t)
-            elif term == "color":
-                c = COLORS[torch.argmax(attribute[term]).item()]
-                text += "{:<10}: {:}\n".format(term, c)
             elif term == "rotation":
                 x, y, z = attribute[term] * 180 / pi
                 text += "{:<10}: {:<8.2f} {:<8.2f} {:<8.2f}\n".format(term, x, y, z)
@@ -48,9 +45,6 @@ class AttributeReconstructionVisualizer(object):
     def visualize_reconstruction(attribute):
         a = copy(attribute)
         a["type"] = TYPES[torch.argmax(a["type"]).item()]
-        a["color"] = COLORS[torch.argmax(a["color"]).item()]
-        if a["type"] == "BG":
-            return TF.to_tensor(visible_image([], AttributeReconstructionVisualizer._default_camera))
         return TF.to_tensor(visible_image([a], AttributeReconstructionVisualizer._default_camera))
 
     def visualize(self, inputs, outputs, iteration):

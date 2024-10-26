@@ -4,7 +4,6 @@ import pybullet as p
 import numpy as np
 
 from ..camera import Camera
-from utils.constants import COLORS2RGB, SHAPES2TYPES
 
 
 class LiteObjectManager(object):
@@ -28,9 +27,9 @@ class LiteObjectManager(object):
         create an bybullet base object from a wavefront .obj file
         set up initial parameters and physical properties
         '''
-        shape = SHAPES2TYPES[type]
-        color = COLORS2RGB[kwargs["color"]] if "color" in kwargs else COLORS2RGB["green"]
-        obj_path = os.path.join(self.obj_dir, "shapes", '%s.obj' % shape)
+        shape = type
+        color = [255, 255, 255]
+        obj_path = os.path.join(self.obj_dir, '%s.obj' % shape)
         orn_quat = p.getQuaternionFromEuler(rotation)
         vis_id = p.createVisualShape(p.GEOM_MESH, fileName=obj_path, meshScale=scale,
                                      rgbaColor=[*(x / 256 for x in color), 1])

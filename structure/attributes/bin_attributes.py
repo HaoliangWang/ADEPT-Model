@@ -31,10 +31,9 @@ class BinAttributes(object):
     def __init__(self, attribute_cfg):
         super(BinAttributes, self).__init__()
         self.n_types = attribute_cfg.N_TYPES
-        self.n_colors = attribute_cfg.N_COLORS
         self.n_bins = attribute_cfg.N_BINS
-        self.keys = ["type", "color", "location", "velocity", "rotation", "scale"]
-        self.value_lengths = [self.n_types, self.n_colors, 3, 3, 3 * self.n_bins, 3]
+        self.keys = ["type", "location", "rotation", "scale"]
+        self.value_lengths = [self.n_types, 3, 3 * self.n_bins, 3]
         self.value_indices = self.cum_sum(self.value_lengths)
 
     def __len__(self):

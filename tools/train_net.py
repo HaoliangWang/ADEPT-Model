@@ -21,7 +21,6 @@ from utils.io import mkdir
 from utils.misc import to_cuda, assert_proper_output_dir, gather_loss_dict
 from tools.paths_catalog import DatasetCatalog
 
-
 def train(cfg, args):
     train_set = DatasetCatalog.get(cfg.DATASETS.TRAIN, args)
     val_set = DatasetCatalog.get(cfg.DATASETS.VAL, args)
@@ -60,7 +59,6 @@ def train(cfg, args):
     for iteration, inputs in enumerate(cycle(train_loader), start_iteration):
         data_time = time.time() - last_batch_time
         iteration = iteration + 1
-        scheduler.step()
 
         inputs = to_cuda(inputs)
         outputs = model(inputs)
@@ -72,6 +70,8 @@ def train(cfg, args):
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+
+        scheduler.step()
 
         batch_time = time.time() - last_batch_time
         last_batch_time = time.time()

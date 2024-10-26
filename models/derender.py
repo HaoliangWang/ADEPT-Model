@@ -12,7 +12,7 @@ class Derender(nn.Module):
         super(Derender, self).__init__()
         self.attributes = build_attributes(cfg.MODEL.ATTRIBUTES)
 
-        resnet = resnet34(pretrained=True)
+        resnet = resnet34(weights='ResNet34_Weights.DEFAULT')
         resnet_layers = list(resnet.children())
 
         resnet_layers.pop()

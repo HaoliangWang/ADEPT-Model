@@ -9,9 +9,9 @@ _C.MODEL = CN()
 # Meta architecture for the model
 _C.MODEL.META_ARCHITECTURE = "DERENDER"
 # Input channels for the model
-_C.MODEL.IN_CHANNELS = 12
+_C.MODEL.IN_CHANNELS = 6
 # The size of pooling kernel in the last layer of derender
-_C.MODEL.POOLING_KERNEL_SIZE = (10, 15)
+_C.MODEL.POOLING_KERNEL_SIZE = (10, 10)
 # Number of derender visual feature channels
 _C.MODEL.FEATURE_CHANNELS = 512
 # Number of intermediate layer channels
@@ -26,9 +26,9 @@ _C.MODEL.ATTRIBUTES = CN()
 # Object attribute representation
 _C.MODEL.ATTRIBUTES.NAME = "BASE_ATTRIBUTES"
 # Number of object classes, including background
-_C.MODEL.ATTRIBUTES.N_TYPES = 3
+_C.MODEL.ATTRIBUTES.N_TYPES = 13
 # Number of colors
-_C.MODEL.ATTRIBUTES.N_COLORS = 7
+# _C.MODEL.ATTRIBUTES.N_COLORS = 7
 
 
 # -----------------------------------------------------------------------------
