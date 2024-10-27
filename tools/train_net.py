@@ -50,7 +50,6 @@ def train(cfg, args):
     checkpoint_period = cfg.SOLVER.CHECKPOINT_PERIOD
     validation_period = cfg.SOLVER.VALIDATION_PERIOD
     summary_writer = SummaryWriter(log_dir=os.path.join(output_dir, "summary"))
-    visualizer = train_set.visualizer(cfg.VISUALIZATION)(summary_writer)
 
     model.train()
     start_training_time = time.time()
@@ -92,9 +91,6 @@ def train(cfg, args):
                 lr=optimizer.param_groups[0]["lr"],
                 memory=torch.cuda.max_memory_allocated() / 1024.0 / 1024.0))
             summary_writer.add_scalars("train", train_metrics.mean, iteration)
-
-        if iteration % 100 == 0:
-            visualizer.visualize(inputs, outputs, iteration)
 
         if iteration % checkpoint_period == 0:
             checkpointer.save("model_{:07d}".format(iteration))

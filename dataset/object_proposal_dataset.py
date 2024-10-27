@@ -5,6 +5,7 @@ from multiprocessing import cpu_count, Pool
 from multiprocessing.pool import ThreadPool
 
 import torch
+from torchvision.utils import save_image
 import torchvision.transforms.functional as TF
 from torch.utils.data.dataloader import default_collate
 from PIL import Image
@@ -12,19 +13,21 @@ from tqdm import tqdm
 import pycocotools.mask as mask_util
 
 from utils.io import read_serialized, write_serialized
-from utils.geometry import iou
 from utils.constants import TERMS, TYPES
 from utils.misc import to_torch, to_cpu
-from visualization.summary.attribute_reconstruction import AttributeReconstructionVisualizer
 
+# def mkdir(path):
+#     if not os.path.exists(path):
+#         os.mkdir(path)
+#     return path
 
 class ObjectProposalDataset(torch.utils.data.dataset.Dataset):
     _split_point = .8
+    _topk = 2
 
     _types = TYPES
     _terms = TERMS
 
-    _visualizer_methods = {"ATTRIBUTE_RECONSTRUCTION": AttributeReconstructionVisualizer}
 
     def __init__(self, dataset_cfg, args):
         self.root = dataset_cfg.ROOT
@@ -36,7 +39,7 @@ class ObjectProposalDataset(torch.utils.data.dataset.Dataset):
         self.attributes = []
         self.basename2objects = defaultdict(list)
 
-        self.case_names = sorted(os.listdir(self.root))
+        self.case_names = sorted(os.listdir(os.path.join(self.root, 'images')))
         if "case_name" in args:
             self.case_names = [args.case_name]
         elif self.split == "TRAIN":
@@ -60,7 +63,7 @@ class ObjectProposalDataset(torch.utils.data.dataset.Dataset):
 
     @staticmethod
     def _prepare_case(root, case_name, anns):
-        img_files = sorted(glob.glob(os.path.join(root, case_name, "imgs", "*")))
+        img_files = sorted(glob.glob(os.path.join(root, "images", case_name, "imgs", "*")))
         n_imgs = len(img_files)
         assert n_imgs == len(anns), "{} has {} images but {} annotation".format(case_name, n_imgs, len(anns))
         img_tuple_files = []
@@ -87,6 +90,7 @@ class ObjectProposalDataset(torch.utils.data.dataset.Dataset):
         mask = torch.Tensor(mask_util.decode(mask_code)).float()
         img = self.img_files[index]
         basename = os.path.basename(img)
+        # trial_name = os.path.dirname(img).split('/')[-2]
 
         img = TF.to_tensor(Image.open(img).convert("RGB"))
 
@@ -105,14 +109,17 @@ class ObjectProposalDataset(torch.utils.data.dataset.Dataset):
                 "index": index}
         if attributes is not None:
             data["attributes"] = attributes
+        
+        # print("trial: ", trial_name, ' ', basename)
+        # mkdir(os.path.join('/mnt/fs0/haw027/b3d_ipe/temp', trial_name))
+        # save_image(segmented_image, os.path.join('/mnt/fs0/haw027/b3d_ipe/temp', trial_name, f"{basename}_{index}_seg.png"))
+        # save_image(img, os.path.join('/mnt/fs0/haw027/b3d_ipe/temp', trial_name, f"{basename}_{index}_img.png"))
+        # print("attributes: ", attributes)
+        
         return data
 
     def __len__(self):
         return len(self.masks)
-
-    @staticmethod
-    def visualizer(name):
-        return ObjectProposalDataset._visualizer_methods[name]
 
     def process_batch(self, inputs, outputs):
         basenames = inputs["basename"]
@@ -122,7 +129,12 @@ class ObjectProposalDataset(torch.utils.data.dataset.Dataset):
             o = {}
             for term in self._terms:
                 if term == "type":
-                    o[term] = self._types[torch.argmax(attributes[term][i]).item()]
+                    _, idxs = torch.topk(attributes[term][i], self._topk)
+                    pred_types = []
+                    for idx in idxs:
+                        pred_types.append(self._types[idx.item()])
+                    o[term] = pred_types
+                    # o[term] = self._types[torch.argmax(attributes[term][i]).item()]
                 else:
                     o[term] = attributes[term][i].tolist()
 
@@ -130,9 +142,9 @@ class ObjectProposalDataset(torch.utils.data.dataset.Dataset):
             self.basename2objects[basenames[i]].append(o)
 
     def _process_result_case(self, case_name, output_dir):
-        img_files = sorted(os.listdir(os.path.join(self.root, case_name, "imgs")))
+        img_files = sorted(os.listdir(os.path.join(self.root, "images", case_name, "imgs")))
         scene = []
-        for img_file in img_files[4:]:
+        for img_file in img_files:
             scene.append({"objects": self.basename2objects[img_file]})
         write_serialized({"scene": scene}, os.path.join(output_dir, "{}.json".format(case_name)))
 

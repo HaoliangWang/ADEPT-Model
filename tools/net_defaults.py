@@ -27,9 +27,6 @@ _C.MODEL.ATTRIBUTES = CN()
 _C.MODEL.ATTRIBUTES.NAME = "BASE_ATTRIBUTES"
 # Number of object classes, including background
 _C.MODEL.ATTRIBUTES.N_TYPES = 13
-# Number of colors
-# _C.MODEL.ATTRIBUTES.N_COLORS = 7
-
 
 # -----------------------------------------------------------------------------
 # Loss

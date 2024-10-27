@@ -7,8 +7,10 @@ import datetime
 import torch
 from torch.utils.data.dataloader import DataLoader
 from tqdm import tqdm
-from tensorboardX import SummaryWriter
 
+from tensorboardX import SummaryWriter
+import sys
+sys.path.append('.')
 from tools.net_defaults import _C as cfg
 from models import build_model
 from dataset import cycle
@@ -19,7 +21,6 @@ from utils.logger import setup_logger
 from utils.io import mkdir
 from utils.misc import to_cuda, assert_proper_output_dir
 from tools.paths_catalog import DatasetCatalog
-from visualization.summary import build_summary_visualization
 
 
 def test(cfg, args):
@@ -44,7 +45,6 @@ def test(cfg, args):
     test_loader = DataLoader(test_set, cfg.SOLVER.IMS_PER_BATCH,
                              num_workers=cfg.DATALOADER.NUM_WORKERS, shuffle=False)
     summary_writer = SummaryWriter(log_dir=os.path.join(output_dir, "summary"))
-    visualizer = test_set.visualizer(cfg.VISUALIZATION)(summary_writer)
 
     model.eval()
     start_training_time = time.time()
@@ -65,9 +65,6 @@ def test(cfg, args):
 
             if iteration % 20 == 0:
                 summary_writer.add_scalars("test", test_metrics.mean, iteration)
-
-            if iteration % 100 == 0:
-                visualizer.visualize(inputs, outputs, iteration)
 
     inference_dir = mkdir(os.path.join(output_dir, "inference"))
     result_dir = mkdir(os.path.join(inference_dir, cfg.DATASETS.TEST))

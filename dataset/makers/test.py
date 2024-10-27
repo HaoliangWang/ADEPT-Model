@@ -9,6 +9,8 @@ from os.path import isfile, join
 import pycocotools.mask as mask_util
 import json
 import yaml
+from glob import glob
+
 
 def makedir(path):
     if not os.path.exists(path):
@@ -39,17 +41,21 @@ scenario = args.scenario
 print(scenario)
 
 # source_path = '/ccn2/u/rmvenkat/data/testing_physion/regenerate_from_old_commit/readout_consolidated/data_balanced'
-source_path = '/ccn2/u/haw027/b3d_ipe/'
-save_path = '/ccn2/u/haw027/b3d_ipe/train/'
+source_path = '/mnt/fs5/rahul/lf_0/'
+# save_path = '/ccn2/u/haw027/b3d_ipe/train/'
+save_path = '/mnt/fs0/haw027/b3d_ipe/train/'
+
 width = 350
 height = 350
 
 file = {}
 scenario_path = join(source_path, scenario+'_all_movies')
-onlyhdf5 = [f for f in listdir(scenario_path) if isfile(join(scenario_path, f)) and join(scenario_path, f).endswith('.hdf5')]
+# onlyhdf5 = [f for f in listdir(scenario_path) if isfile(join(scenario_path, f)) and join(scenario_path, f).endswith('.hdf5')]
+onlyhdf5 = [y for x in os.walk(scenario_path) for y in glob(os.path.join(x[0], '*.hdf5'))]
 for hdf5_file in onlyhdf5:
-    trial_name = hdf5_file[:-5]
-    print("dir: ", join(save_path, trial_name, "imgs"))
+    trial_name = '_'.join(hdf5_file.split('/')[-2:])[:-5]
+    if trial_name.endswith('temp'):
+        continue
     makedir(join(save_path, trial_name, "imgs"))
     file[trial_name] = {}
     file[trial_name]['scene'] = []
@@ -92,4 +98,4 @@ for hdf5_file in onlyhdf5:
                 this_frame['objects'].append(obj_info)
             file[trial_name]['scene'].append(this_frame)
 
-write_serialized(file, join('/'.join(save_path.split('/')[:-2]), 'annotated_ann.json'))
+write_serialized(file, join('/'.join(save_path.split('/')[:-2]), f'annotated_ann_{scenario}.json'))
