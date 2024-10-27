@@ -23,7 +23,6 @@ from utils.misc import to_torch, to_cpu
 
 class ObjectProposalDataset(torch.utils.data.dataset.Dataset):
     _split_point = .8
-    _topk = 2
 
     _types = TYPES
     _terms = TERMS
@@ -129,7 +128,7 @@ class ObjectProposalDataset(torch.utils.data.dataset.Dataset):
             o = {}
             for term in self._terms:
                 if term == "type":
-                    _, idxs = torch.topk(attributes[term][i], self._topk)
+                    _, idxs = torch.topk(attributes[term][i], len(ObjectProposalDataset._types))
                     pred_types = []
                     for idx in idxs:
                         pred_types.append(self._types[idx.item()])

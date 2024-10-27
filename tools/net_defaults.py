@@ -11,6 +11,7 @@ _C.MODEL.META_ARCHITECTURE = "DERENDER"
 # Input channels for the model
 _C.MODEL.IN_CHANNELS = 6
 # The size of pooling kernel in the last layer of derender
+# _C.MODEL.POOLING_KERNEL_SIZE = (8, 8)
 _C.MODEL.POOLING_KERNEL_SIZE = (10, 10)
 # Number of derender visual feature channels
 _C.MODEL.FEATURE_CHANNELS = 512
@@ -64,6 +65,7 @@ _C.SOLVER.MAX_ITER = 40000
 _C.SOLVER.BASE_LR = 0.001
 _C.SOLVER.BIAS_LR_FACTOR = 2
 
+# _C.SOLVER.MOMENTUM = 0.8
 _C.SOLVER.MOMENTUM = 0.9
 
 _C.SOLVER.WEIGHT_DECAY = 0.0005
