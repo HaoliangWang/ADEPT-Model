@@ -40,7 +40,7 @@ args = parser.parse_args()
 scenario = args.scenario
 print(scenario)
 
-# source_path = '/ccn2/u/rmvenkat/data/testing_physion/regenerate_from_old_commit/readout_consolidated/data_balanced'
+# source_path = '/ccn2/u/rmvenkat/data/testing_physion/regenerate_from_old_commit/test_humans_consolidated/lf_0'
 source_path = '/mnt/fs5/rahul/lf_0/'
 # save_path = '/ccn2/u/haw027/b3d_ipe/train/'
 save_path = '/mnt/fs0/haw027/b3d_ipe/train/'
