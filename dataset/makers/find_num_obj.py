@@ -22,7 +22,7 @@ scenario_path = join(source_path, scenario+'_all_movies')
 onlyhdf5 = [f for f in listdir(scenario_path) if isfile(join(scenario_path, f)) and join(scenario_path, f).endswith('.hdf5')]
 
 all_data = {}
-# fig = plt.figure()
+fig = plt.figure()
 for hdf5_file in onlyhdf5:
     trial_name = hdf5_file[:-5]
     print('\t', trial_name)
@@ -40,9 +40,9 @@ for hdf5_file in onlyhdf5:
     # plt.plot(range(len(num_objs)), num_objs)
     all_data[trial_name] = num_objs
 
-# plt.xlabel("frame")
-# plt.ylabel("num obj")
-# plt.title("num obj over time")
-# fig.savefig(join(save_path, f'{scenario}.png'))
+plt.xlabel("frame")
+plt.ylabel("num obj")
+plt.title("num obj over time")
+fig.savefig(join(save_path, f'{scenario}.png'))
 with open(f'/ccn2/u/haw027/b3d_ipe/num_obj/{scenario}.json', "w") as f:
     json.dump(all_data, f)
