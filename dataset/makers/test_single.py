@@ -96,10 +96,10 @@ for hdf5_file in onlyhdf5:
         this_frame['objects'] = {}
         for i, o_id in enumerate(object_ids):
             obj_info = {}
-            obj_info['type'] = model_names[i].decode('UTF-8')
-            obj_info['location'] = locations[i].tolist()
-            obj_info['rotation'] = rotations[i].tolist()
-            obj_info['scale'] = scales[i].tolist()
+            obj_info['type'] = [model_names[i].decode('UTF-8')]
+            obj_info['location'] = [locations[i].tolist()]
+            obj_info['rotation'] = [rotations[i].tolist()]
+            obj_info['scale'] = [scales[i].tolist()]
             # obj_mask = mask_util.encode(get_mask_area(im_seg, object_segmentation_colors[i]))
             # obj_info['mask'] = {'size': obj_mask['size'], 'counts': obj_mask['counts'].decode('UTF-8')}
             this_frame['objects'][str(o_id)] = obj_info
